@@ -1,0 +1,28 @@
+---
+package:
+  name: weave/scope
+  author: Antoine Legrand
+  version: 0.15.0
+  description: scope
+  license: MIT
+
+variables:
+  svc_type: NodePort
+  scope_host: "weave-scope.{{namespace}}.svc.cluster.local:80"
+  image: weaveworks/scope:0.15.0
+
+resources:
+  - file: scope-dp.yaml
+    name: weave-scope
+    type: deployment
+
+  - file: scope-probe-ds.yaml
+    name: weave-scope-probe
+    type: ds
+
+  - file: scope-svc.yaml
+    name: weave-scope
+    type: svc
+
+deploy:
+  - name: $self

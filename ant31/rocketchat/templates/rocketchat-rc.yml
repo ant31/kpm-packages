@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: rocketchat
+  labels: {'k8s-app': 'rocketchat', 'version': 'v1'}
+  namespace: {{namespace}}
+spec:
+  replicas: {{replicas}}
+  selector: {'k8s-app': 'rocketchat'}
+  template:
+    metadata:
+      labels: {'k8s-app': 'rocketchat', 'version': 'v1'}
+    spec:
+      containers:
+      - name: rocketchat
+        image: rocketchat/rocket.chat:latest
+        resources:
+          limits:
+            cpu: 100m
+            memory: 300Mi
+        env:
+          - name: MONGO_URL
+            value: {{mongodb_url}}
+          - name: MAIL_URL
+            value: {{mail_url}}
+        ports: [{'protocol': 'TCP', 'containerPort': 3000, 'name': 'rocketchat'}]

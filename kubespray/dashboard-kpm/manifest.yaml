@@ -1,0 +1,26 @@
+---
+package:
+  name: kubespray/dashboard-kpm
+  author: Antoine Legrand
+  version: 1.0.3
+  description: kubernetes-dashboard with KPM pluging
+  license: MIT
+
+variables:
+  cluster_domain: cluster.local
+  image: quay.io/kubespray/kubernetes-dashboard:canary
+  kpm_backend_url: http://kpm-backend.{{namespace}}.svc.{{cluster_domain}}
+  svc_type: NodePort
+
+resources:
+  - name: dashboard-kpm
+    file: kubernetes-dashboard-kpm-svc.yaml
+    type: svc
+
+  - name: dashboard-kpm
+    file: kubernetes-dashboard-kpm-rc.yaml
+    type: rc
+
+deploy:
+  - name: kubespray/kpm-backend
+  - name: $self

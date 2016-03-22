@@ -1,0 +1,27 @@
+---
+package:
+  name: deis/deis-registry
+  author: ant31
+  version: 2.0.0-beta
+  description: deis-registry
+  license: Apache License V2
+
+variables:
+  storage: minio
+  registry_image: quay.io/deisci/registry:canary
+
+resources:
+  - file: deis-registry-service-account.yaml
+    name: deis-registry
+    type: serviceaccount
+
+  - file: deis-registry-service.yaml
+    name: deis-registry
+    type: service
+
+  - file: deis-registry-rc.yaml
+    name: deis-registry
+    type: rc
+
+deploy:
+  - name: $self

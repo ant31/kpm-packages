@@ -1,0 +1,30 @@
+---
+package:
+  name: mysql/mysql
+  author: Antoine Legrand
+  version: 0.9.0
+  description: mysql
+  license: MIT
+
+variables:
+  image: mysql
+  root_password: rootpwd
+  database: mysqldb
+  user: mysql
+  password: userpass
+  data_volumes:
+    - name: mysql-data
+      emptyDir:
+        medium: ""
+
+resources:
+  - file: mysql-deployment.yaml
+    name: mysql
+    type: deployment
+
+  - file: mysql-service.yaml
+    name: mysql
+    type: service
+
+deploy:
+  - name: $self

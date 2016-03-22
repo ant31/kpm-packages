@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    k8s-app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: mysql
+  template:
+    metadata:
+      labels:
+        k8s-app: mysql
+    spec:
+      containers:
+        - image: {{image}}
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: {{root_password}}
+            - name: MYSQL_DATABASE
+              value: {{database}}
+            - name: MYSQL_USER
+              value: {{user}}
+            - name: MYSQL_PASSWORD
+              value: {{password}}
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            tcpSocket:
+              port: "mysql"
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          readinessProbe:
+            initialDelaySeconds: 10
+            exec:
+              command: ["mysqladmin", "status", "-p{{root_password}}"]
+      volumes: {{data_volumes}}

@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ghost
+  labels:
+    k8s-app: "ghost"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: "ghost"
+    spec:
+      containers:
+        - name: "nginx"
+          image: "nginx:1.9.12"
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 80
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/usr/sbin/nginx","-s","quit"]
+          volumeMounts:
+            - name: "nginx-conf"
+              mountPath: "/etc/nginx/conf.d"
+        - name: "ghost"
+          image: {{image}}
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: "NODE_ENV"
+              value: "production"
+            - name: "GHOST_CONFIG"
+              value: "/etc/ghost/config.js"
+          volumeMounts:
+            - name: "ghost"
+              mountPath: "/etc/ghost"
+      volumes:
+        - name: "nginx-conf"
+          configMap:
+            name: "ghost-config"
+            items:
+              - key: "ghost.conf"
+                path: "ghost.conf"
+        - name: "ghost"
+          configMap:
+            name: "ghost-config"
+            items:
+              - key: "config.js"
+                path: "config.js"

@@ -1,0 +1,31 @@
+---
+package:
+  name: elastic/logstash
+  author: Antoine Legrand
+  version: 2.3.0-1
+  description: logstash
+  license: MIT
+
+variables:
+  image: quay.io/ant31/kubernetes-logstash:2.3
+  elasticsearch_hosts: '"elasticsearch.{{namespace}}.svc.cluster.local:9200"'
+  logstash_conf_volume:
+    name: logstashconf
+    configMap:
+      name: logstash
+
+resources:
+  - file: logstash-configmap.yaml
+    name: logstash
+    type: configmap
+
+  - file: logstash-rc.yaml
+    name: logstash
+    type: rc
+
+  - file: logstash-svc.yaml
+    name: logstash
+    type: svc
+
+deploy:
+  - name: $self

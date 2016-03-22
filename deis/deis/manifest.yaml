@@ -1,0 +1,21 @@
+---
+package:
+  name: deis/deis
+  author: ant31
+  version: 2.0.0-beta
+  description: deis
+  license: Apache License v2
+
+variables:
+  storage: minio
+
+deploy:
+  - name: kpm.sh/deis/deis-secrets
+  - name: kpm.sh/deis/deis-logger
+  - name: kpm.sh/deis/deis-minio
+  - name: kpm.sh/deis/deis-registry
+  - name: kpm.sh/deis/deis-database
+  - name: kpm.sh/deis/deis-controller
+  - name: kpm.sh/deis/deis-workflow-manager
+  - name: kpm.sh/deis/deis-builder
+  - name: kpm.sh/deis/deis-router

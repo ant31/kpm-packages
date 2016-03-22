@@ -1,0 +1,38 @@
+---
+package:
+  name: ghost/ghost
+  author: Antoine Legrand
+  version: 0.7.7-2
+  description: ghost
+  license: MIT
+
+variables:
+  image: kelseyhightower/ghost:0.7.7
+  ghost_host: ghost.example.com
+  mysql_database: ghost
+  mysql_user: ghost
+  mysql_password: ghostpass
+  mysql_host: mysql.{{namespace}}.svc.cluster.local
+  svc_type: NodePort
+
+resources:
+  - file: ghost-configmap.yaml
+    name: ghost-config
+    type: configmap
+    
+  - file: ghost-deployment.yaml
+    name: ghost
+    type: deployment
+
+  - file: ghost-service.yaml
+    name: ghost
+    type: service
+
+deploy:
+  - name: mysql/mysql
+    variables:
+      database: ghost
+      user: ghost
+      password: ghostpass
+
+  - name: $self

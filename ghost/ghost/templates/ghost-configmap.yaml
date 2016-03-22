@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ghost-config
+
+data:
+  config.js: |
+    const fs = require('fs');
+
+    var config;
+
+    config = {
+      production: {
+        url: 'https://{{ghost_host}}',
+        database: {
+          client: 'mysql',
+          connection: {
+            host: '{{mysql_host}}',
+            user: '{{mysql_user}}',
+            password: '{{mysql_password}}',
+            database: '{{mysql_database}}',
+            charset: 'utf8',
+          }
+        },
+        server: {
+          host: '127.0.0.1',
+          port: '2368'
+        },
+        paths: {
+          contentPath: '/var/lib/ghost'
+        },
+      }
+    }
+    module.exports = config;
+
+  ghost.conf: |
+    server {
+      listen 80;
+
+      location / {
+        proxy_pass http://127.0.0.1:2368;
+      }
+    }

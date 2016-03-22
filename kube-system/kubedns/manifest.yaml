@@ -1,0 +1,22 @@
+---
+package:
+  name: kube-system/kubedns
+  author: Antoine Legrand
+  version: 1.14.0-1
+  description: kube-system/kubedns
+  license: MIT
+
+variables:
+  cluster_ip: 10.233.0.3
+
+resources:
+  - file: kubedns-svc.yaml
+    name: kubedns
+    type: svc
+
+  - file: kubedns-rc.yaml
+    name: kubedns
+    type: rc
+
+deploy:
+  - name: $self

@@ -1,0 +1,25 @@
+---
+package:
+  name: slackin/slackin
+  author: Antoine Legrand
+  version: 0.8.2
+  description: slackin
+  license: MIT
+
+variables:
+  svc_type: NodePort
+  slack_token: "generate a test token from an admin user"
+  team_id: "team name 'https://<team_id>.slack.com'"
+  image: quay.io/ant31/slackin:v0.8.2
+
+resources:
+  - file: slackin-dp.yaml
+    name: slackin
+    type: deployment
+
+  - file: slackin-svc.yaml
+    name: slackin
+    type: svc
+
+deploy:
+  - name: $self

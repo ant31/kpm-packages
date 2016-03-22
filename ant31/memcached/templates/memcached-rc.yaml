@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: memcached
+  labels: {'k8s-app': 'memcached', 'version': 'v1'}
+spec:
+  replicas: 1
+  selector: {'k8s-app': 'memcached'}
+  template:
+    metadata:
+      labels: {'k8s-app': 'memcached', 'version': 'v1'}
+    spec:
+      containers:
+      - name: memcached
+        image: {{image}}

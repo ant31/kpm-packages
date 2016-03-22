@@ -1,0 +1,14 @@
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: rabbitmq-mgt
+  labels:
+    name: rabbitmq-mgt
+spec:
+  selector:
+    k8s-app: rabbitmq
+  type: NodePort
+  ports:
+    - name: rabbitmq-manager
+      targetPort: 15672
+      port: 15672

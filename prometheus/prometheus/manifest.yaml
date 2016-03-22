@@ -1,0 +1,28 @@
+---
+package:
+  name: prometheus/prometheus
+  author: <author>
+  version: 1.2.0
+  description: prometheus
+  license: MIT
+
+variables:
+  image: quay.io/prometheus/prometheus:v1.0.0
+
+resources:
+  - file: prometheus-configmap.yaml
+    name: prometheus-config
+    type: configmap
+
+  - file: prometheus-deployment.yaml
+    name: prometheus
+    type: deployment
+
+  - file: prometheus-service.yaml
+    name: prometheus
+    type: svc
+
+deploy:
+  - name: prometheus/node-exporter
+  - name: $self
+  - name: prometheus/grafana

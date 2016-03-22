@@ -1,0 +1,27 @@
+---
+package:
+  name: deis/deis-router
+  author: ant31
+  version: 2.0.0-beta
+  description: deis-router
+  license: Apache License v2
+
+variables:
+  storage: minio
+  router_image: quay.io/deisci/router:canary
+
+resources:
+  - file: deis-router-service-account.yaml
+    name: deis-router
+    type: serviceaccount
+
+  - file: deis-router-service.yaml
+    name: deis-router
+    type: service
+
+  - file: deis-router-rc.yaml
+    name: deis-router
+    type: rc
+
+deploy:
+  - name: $self

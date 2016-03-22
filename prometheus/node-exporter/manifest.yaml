@@ -1,0 +1,23 @@
+---
+package:
+  name: prometheus/node-exporter
+  author: Antoine Legrand
+  version: 1.0.0
+  description: node-exporter
+  license: MIT
+
+variables:
+  image: prom/node-exporter
+  namespace: prometheus
+
+resources:
+  - file: node-exporter-ds.yaml
+    name: node-exporter
+    type: ds
+
+  - file: node-exporter-service.yaml
+    name: node-exporter
+    type: svc
+
+deploy:
+  - name: $self

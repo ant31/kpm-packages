@@ -1,0 +1,25 @@
+---
+package:
+  name: kube-system/kubernetes-dashboard
+  author: Antoine Legrand
+  version: 1.0.0
+  description: kube-system/kubernetes-dashboard
+  license: MIT
+
+variables:
+  repliacs: 1
+  image: gcr.io/google_containers/kubernetes-dashboard-amd64:canary
+  svc_type: NodePort
+  namespace: kube-system
+
+resources:
+  - file: kubernetes-dashboard-rc.yaml
+    type: rc
+    name: kubernetes-dashboard
+
+  - file: kubernetes-dashboard-svc.yaml
+    type: svc
+    name: kubernetes-dashboard
+
+deploy:
+  - name: $self

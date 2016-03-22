@@ -1,0 +1,27 @@
+---
+package:
+  name: ant31/rabbitmq-3nodes
+  author: Antoine Legrand
+  version: 3.5.6-1
+  description: create rabbitmq-3nodes with different pvc
+  license: MIT
+
+deploy:
+  - name: base/persistent-volume-claims
+    shards:
+      - name: rmq-1
+      - name: rmq-2
+      - name: rmq-3
+        variables:
+          storage: 50Gi
+
+  - name: rabbitmq/rabbitmq
+    shards:
+      - name: 1
+      - name: 2
+      - name: 3
+    variables:
+      data_volumes:
+        name: varlibrmq
+        persistentVolumeClaim:
+          claimName: pvc-rmq-{{name}}

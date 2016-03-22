@@ -1,0 +1,26 @@
+---
+package:
+  name: ant31/mysql
+  author: Antoine Legrand
+  version: 1.0.0
+  description: ant31/mysql
+  license: MIT
+
+variables:
+  volumes: [{name: "mysql-data", emptyDir: {}}]
+  root_password: mysql
+  password: mysql
+  user: mysql
+  database: mysql
+
+resources:
+  - file: mysql-rc.yaml
+    type: rc
+    name: mysql
+
+  - file: mysql-svc.yaml
+    type: svc
+    name: mysql
+
+deploy:
+  - name: $self

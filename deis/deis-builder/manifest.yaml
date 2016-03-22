@@ -1,0 +1,30 @@
+---
+package:
+  name: deis/deis-builder
+  author: ant31
+  version: 2.0.0-beta
+  description: deis-builder
+  license: MIT
+
+variables:
+  storage: minio
+  slugbuilder_image: quay.io/deisci/slugbuilder:canary
+  dockerbuilder_image: quay.io/deisci/dockerbuilder:canary
+  builder_image: quay.io/deisci/builder:canary
+
+resources:
+  - file: deis-builder-service-account.yaml
+    name: deis-builder
+    type: serviceaccount
+
+  - file: deis-builder-service.yaml
+    name: deis-builder
+    type: service
+
+  - file: deis-builder-rc.yaml
+    name: deis-builder
+    type: rc
+
+
+deploy:
+  - name: $self

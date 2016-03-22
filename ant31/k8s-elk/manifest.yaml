@@ -1,0 +1,83 @@
+---
+package:
+  name: ant31/k8s-elk
+  author: Antoine Legrand
+  version: 1.1.0
+  description: k8s-elk
+  license: MIT
+
+variables:
+  rabbitmq_host: rabbitmq.{{namespace}}.svc.cluster.local
+  rabbitmq_password: logs
+  rabbitmq_user: logs
+  rabbitmq_vhost: logs
+  rabbitmq_ack: 'true'
+  elasticsearch_hosts: '"elasticsearch.{{namespace}}.svc.cluster.local:9200"'
+  json_containers: '"kibana-container"'
+
+resources:
+  - file: config.yaml
+    name: elk-shipper
+    type: configmap
+
+  - file: logstash-indexer-configmap.yaml
+    name: elk-indexer
+    type: configmap
+
+
+deploy:
+  # RabbitMQ
+  # - List HA nodes in `shards`.
+  # - Use patch to add the user, pass and vhost
+  #   they are not parametrize in the original package rabbitmq/rabbitmq
+  - name: rabbitmq/rabbitmq
+    shards:
+      - name: 1
+      - name: 2
+    resources:
+      - file: rabbitmq-rc.yaml
+        patch:
+          - op: add
+            path: "/spec/template/spec/containers/0/env/-"
+            value: {name: RABBITMQ_DEFAULT_USER, value: logs}
+          - op: add
+            path: "/spec/template/spec/containers/0/env/-"
+            value: {name: RABBITMQ_DEFAULT_PASS, value: logs}
+          - op: add
+            path: "/spec/template/spec/containers/0/env/-"
+            value: {name: RABBITMQ_DEFAULT_VHOST, value: logs}
+
+  # Elasticsearch
+  # - List data nodes in shards
+  - name: elasticsearch/elasticsearch
+    shards:
+      - name: 1
+      - name: 2
+
+  # Deploy logstash shipper and indexer configmaps
+  - name: $self
+
+  # Kube-Logstash
+  # - Daemonset to ship logs to rabbitmq on all nodes
+  # - Configure the volume variable to use the configmap.
+  - name: logstash/kube-logstash
+    variables:
+      logstash_conf_volume:
+        name: logstashconf
+        configMap:
+          name: elk-shipper
+
+  # Logstash
+  # - Logstash agent to process logs
+  # - Read logs from RabbitMQ and store them in ES.
+  # - Configure the volume variable to use the configmap.
+  - name: logstash/logstash
+    variables:
+      logstash_conf_volume:
+        name: logstashconf
+        configMap:
+          name: elk-indexer
+
+  # Kibana
+  - name: kibana/kibana
+    version: 4.4.0

@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: influxGrafana
+  name: influxdb-grafana
+  namespace: {{namespace}}
+spec:
+  replicas: 1
+  selector:
+    name: influxGrafana
+  template:
+    metadata:
+      labels:
+        name: influxGrafana
+    spec:
+      containers:
+        - name: influxdb
+          image: {{influxdb_image}}
+          volumeMounts:
+            - mountPath: /data
+              name: influxdb-storage
+        - name: grafana
+          image: {{grafana_image}}
+          env:
+            - name: INFLUXDB_SERVICE_URL
+              value: {{influxdb_url}}
+            - name: GF_AUTH_BASIC_ENABLED
+              value: "false"
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: Admin
+          volumeMounts:
+            - mountPath: /var
+              name: grafana-storage
+      volumes:
+        - name: influxdb-storage
+          emptyDir: {}
+        - name: grafana-storage
+          emptyDir: {}

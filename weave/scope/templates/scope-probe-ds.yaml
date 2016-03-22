@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    app: weavescope
+    weavescope-component: weavescope-probe
+  name: weavescope-probe
+spec:
+  template:
+    metadata:
+      labels:
+        app: weavescope
+        weavescope-component: weavescope-probe
+    spec:
+      hostPID: true
+      hostNetwork: true
+      containers:
+        - name: weavescope-probe
+          image: {{image}}
+          args:
+            - '--no-app'
+            - '--probe.docker.bridge=docker0'
+            - '--probe.docker=true'
+            - '--probe.kubernetes=true'
+            - '{{scope_host}}'
+          securityContext:
+            privileged: true
+          resources:
+            limits:
+              cpu: 500m
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+          list_key: {{list}}
+          hash_key: {{hash}}
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock

@@ -1,0 +1,22 @@
+---
+package:
+  name: ant31/memcached
+  author: Antoine Legrand
+  version: 1.0.0
+  description: ant31/memcached
+  license: MIT
+
+variables:
+  image: memcached:1.4
+
+resources:
+  - file: memcached-rc.yaml
+    type: rc
+    name: memcached
+
+  - file: memcached-svc.yaml
+    type: svc
+    name: memcached
+
+deploy:
+  - name: $self

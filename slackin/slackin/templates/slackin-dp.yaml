@@ -1,0 +1,25 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: slackin
+  labels: {'k8s-app': 'slackin'}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels: {'k8s-app': 'slackin'}
+    spec:
+      containers:
+      - name: slackin
+        image: {{image}}
+        resources:
+          limits:
+            cpu: 50m
+            memory: 100Mi
+        env:
+          - name: SLACK_TEAM_ID
+            value: {{team_id}}
+          - name: SLACK_TOKEN
+            value: {{slack_token}}
+        ports: [{'protocol': 'TCP', 'containerPort': 3000, 'name': 'slackin'}]

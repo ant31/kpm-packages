@@ -1,0 +1,69 @@
+---
+package:
+  name: deis/deis-secrets
+  author: ant31
+  version: 2.0.0-beta
+  description: deis
+  license: Apache License v2
+
+variables:
+  storage: minio
+
+  # database
+  database_user: deisuser
+  database_password: deispasswd
+
+  # storage
+  builder_bucket: deis-builder-bucket
+  registry_bucket: deis-registry-bucket
+  database_bucket: deis-database-bucket
+
+  storage_creds:
+    minio:
+      access_key: 8TZRY2JRWMPT6UMXR6I5
+      secret_key: gbstrOvotMMcg2sMfGUhA5a6Et/EI5ALtIHsobYk
+    s3:
+      access_key: yours3key
+      secret_key: yours3secret
+      region: us-west-1
+    gcs:
+      key_json: "json data key"
+    azure:
+      account_name: yourazurename
+      account_key: yourazurekey
+
+resources:
+  - file: deis-builder-secret-ssh-private-keys.yaml
+    name: builder-ssh-private-keys
+    type: secret
+    protected: true
+
+  - file: deis-controller-secret-django-secret-key.yaml
+    name: django-secret-key
+    type: secret
+    protected: true
+
+  - file: deis-controller-secret-builder-key-auth.yaml
+    name: builder-key-auth
+    type: secret
+    protected: true
+
+  - file: deis-database-secret-creds.yaml
+    name: database-creds
+    type: secret
+    protected: true
+
+  - file: deis-objectstorage-secret.yaml
+    name: objectstorage-keyfile
+    type: secret
+
+  - file: deis-minio-secret-user.yaml
+    name: minio-user
+    type: secret
+
+  - file: deis-router-dhparam-secret.yaml
+    name: deis-router-dhparam
+    type: secret
+
+deploy:
+  - name: $self

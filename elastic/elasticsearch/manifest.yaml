@@ -1,0 +1,48 @@
+---
+package:
+  name: elastic/elasticsearch
+  author: Antoine Legrand
+  version: 2.3.1-1
+  description: elasticsearch
+  license: MIT
+
+variables:
+  image: quay.io/pires/docker-elasticsearch-kubernetes:2.3.1
+  cluster_name: esk8s
+  data_volumes:
+    - name: storage
+      emptyDir:
+        medium: ""
+
+
+resources:
+  - file: service-account.yaml
+    name: elasticsearch
+    type: serviceaccount
+
+  - file: es-discovery-svc.yaml
+    name: elasticsearch-discovery
+    type: svc
+
+  - file: es-svc.yaml
+    name: elasticsearch
+    type: svc
+
+  - file: es-data-dp.yaml
+    name: es-data
+    type: deployment
+    sharded: yes
+
+  - file: es-client-dp.yaml
+    name: es-client
+    type: deployment
+
+  - file: es-master-dp.yaml
+    name: es-master
+    type: deployment
+
+shards:
+  - name: 1
+
+deploy:
+  - name: $self

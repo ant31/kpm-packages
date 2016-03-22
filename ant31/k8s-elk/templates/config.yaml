@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elk-shipper
+data:
+  20-input-kubernetes: |-
+    input {
+      file {
+        path => "/var/log/containers/*.log"
+        tags => ["kubernetes", "docker"]
+      }
+    }
+
+    filter {
+      if "kubernetes" and "docker" in [tags] {
+            kubernetes {
+                add_tag => ["kubernetes_filtered"]
+           }
+      }
+    }
+
+  30-output-kubernetes: |-
+    output {
+
+    rabbitmq {
+    durable => true
+    exchange => "logs"
+    exchange_type => "direct"
+    host => "{{rabbitmq_host}}"
+    key =>   "logstash.logs"
+    password => '{{rabbitmq_password}}'
+    user => '{{rabbitmq_user}}'
+    vhost => '{{rabbitmq_vhost}}'
+    persistent => true
+    workers => 2
+    }
+    }

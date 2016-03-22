@@ -1,0 +1,27 @@
+---
+package:
+  name: deis/deis-workflow-manager
+  author: ant31
+  version: 2.0.0-beta
+  description: deis
+  license: Apache License v2
+
+variables:
+  storage: minio
+  workflow_manager_image: quay.io/deisci/workflow-manager:canary
+
+resources:
+  - file: deis-workflow-manager-service-account.yaml
+    name: deis-workflow-manager
+    type: serviceaccount
+
+  - file: deis-workflow-manager-service.yaml
+    name: deis-workflow-manager
+    type: service
+
+  - file: deis-workflow-manager-rc.yaml
+    name: deis-workflow-manager
+    type: rc
+
+deploy:
+  - name: $self

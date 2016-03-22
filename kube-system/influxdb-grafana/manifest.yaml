@@ -1,0 +1,30 @@
+---
+package:
+  name: kube-system/influxdb-grafana
+  author: Antoine Legrand
+  version: 1.0.0
+  description: influxdb-grafana
+  license: MIT
+
+variables:
+  namespace: kube-system
+  grafana_image: kubernetes/heapster_grafana:v2.5.0
+  influxdb_image: kubernetes/heapster_influxdb:v0.6
+  influxdb_url: "http://monitoring-influxdb.{{namespace}}.svc.cluster.local:8086"
+  svc_type: NodePort
+
+resources:
+  - file: influxdb-rc.yml
+    type: rc
+    name: influxdb-grafana
+
+  - file: influxdb-svc.yml
+    type: svc
+    name: monitoring-influxdb
+
+  - file: grafana-svc.yml
+    type: svc
+    name: monitoring-grafana
+
+deploy:
+  - name: $self

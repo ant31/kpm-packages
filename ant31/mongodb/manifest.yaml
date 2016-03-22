@@ -1,0 +1,23 @@
+---
+package:
+  name: ant31/mongodb
+  author: Antoine Legrand <2t.antoine@gmail.com>
+  version: 1.0.0
+  description: mongodb
+  license: MIT
+
+variables:
+  image: mongo:3.2.0
+  namespace: default
+
+resources:
+  - file: mongodb-svc.yaml
+    name: mongodb
+    type: svc
+
+  - file: mongodb-rc.yaml
+    name: mongodb
+    type: rc
+
+deploy:
+  - name: $self

@@ -1,0 +1,14 @@
+---
+package:
+  name: ant31/kube-ui
+  author: Antoine Legrand
+  version: 1.0.0
+  description: ant31/kube-ui
+  license: MIT
+
+deploy:
+  - name: kube-ui
+    resources:
+      - file: kube-ui-svc.yaml
+        patch:
+          - {op: add, path: "/spec/ports/0/nodePort", value: 32211}

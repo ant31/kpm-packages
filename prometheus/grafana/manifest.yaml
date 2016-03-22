@@ -1,0 +1,24 @@
+---
+package:
+  name: prometheus/grafana
+  author: Antoine Legrand
+  version: 1.0.1
+  description: grafana
+  license: MIT
+
+variables:
+  image: grafana/grafana:3.1.0
+  namespace: prometheus
+
+resources:
+  - file: grafana-deployment.yaml
+    name: grafana
+    type: deployment
+
+
+  - file: grafana-service.yaml
+    name: grafana
+    type: svc
+
+deploy:
+  - name: $self

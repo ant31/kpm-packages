@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    kubernetes.io/name: monitoring-grafana
+  name: monitoring-influxdb
+  namespace: {{namespace}}
+spec:
+  selector:
+    name: influxGrafana
+  ports:
+    - name: http
+      port: 8083
+      targetPort: 8083
+    - name: api
+      port: 8086
+      targetPort: 8086

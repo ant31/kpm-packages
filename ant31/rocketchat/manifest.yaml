@@ -1,0 +1,27 @@
+---
+package:
+  name: "titi/rocketchat"
+  author: Antoine Legrand <2t.antoine@gmail.com>
+  version: 1.7.0
+  description: rocketchat
+  license: MIT
+
+variables:
+  replicas: 1
+  image: rocketchat/rocket.chat:latest
+  namespace: rocketchat
+  mail_url: smtp://
+  cluster: cluster.local
+  mongodb_url: mongodb://mongodb.{{namespace}}.svc.{{cluster}}:27017/rocketchat
+
+resources:
+  - file: rocketchat-svc.yml
+    name: rocketchat
+    type: svc
+
+  - file: rocketchat-rc.yml
+    name: rocketchat
+    type: rc
+
+deploy:
+  - name: ant31/mongodb

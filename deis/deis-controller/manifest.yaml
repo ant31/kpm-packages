@@ -1,0 +1,28 @@
+---
+package:
+  name: deis/deis-controller
+  author: ant31
+  version: 2.0.0-beta
+  description: deis-controller
+  license: Apache License v2
+
+variables:
+  storage: minio
+  controller_image: quay.io/deisci/controller:canary
+  slugrunner_image: quay.io/deisci/slugrunner:canary
+
+resources:
+  - file: deis-controller-rc.yaml
+    name: deis-controller
+    type: rc
+
+  - file: deis-controller-service-account.yaml
+    name: deis-controller
+    type: serviceaccount
+
+  - file: deis-controller-service.yaml
+    name: deis-controller
+    type: service
+
+deploy:
+  - name: $self

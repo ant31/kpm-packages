@@ -1,0 +1,33 @@
+---
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  labels:
+    app: dashboard-kpm
+  name: dashboard-kpm
+  namespace: kube-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dashboard-kpm
+    spec:
+      serviceAccount: kubeproxy
+      containers:
+        - name: dashboard-kpm
+          image: {{image}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+              name: dashboard-kpm
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9090
+            initialDelaySeconds: 30
+            timeoutSeconds: 30
+          env:
+            - name: KPM_BACKEND_URL
+              value: {{kpm_backend_url}}

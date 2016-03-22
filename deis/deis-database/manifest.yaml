@@ -1,0 +1,28 @@
+---
+package:
+  name: deis/deis-database
+  author: ant31
+  version: 2.0.0-beta
+  description: deis-database
+  license: MIT
+
+variables:
+  storage: minio
+  database_image: quay.io/deisci/postgres:canary
+
+resources:
+  - file: deis-database-service-account.yaml
+    name: deis-database
+    type: serviceaccount
+
+  - file: deis-database-service.yaml
+    name: deis-database
+    type: service
+
+  - file: deis-database-rc.yaml
+    name: deis-database
+    type: rc
+
+
+deploy:
+  - name: $self

@@ -1,0 +1,198 @@
+---
+package:
+  name: deis/deis
+  author: <author>
+  version: 1.0.0
+  description: deis
+  license: MIT
+
+variables:
+  namespace: deis
+  storage: minio
+  # builder
+  slugbuilder_image: quay.io/deisci/slugbuilder:canary
+  dockerbuilder_image: quay.io/deisci/dockerbuilder:canary
+  builder_image: quay.io/deisci/builder:canary
+
+  # logger
+  loggerfluentd_image: quay.io/deisci/fluentd:canary
+  logger_image: quay.io/deisci/logger:canary
+
+  # database
+  database_image: quay.io/deisci/postgres:canary
+  database_user: deisuser
+  database_password: deispasswd
+
+  # minio
+  minio_image: quay.io/deisci/minio:canary
+
+  # registry
+  registry_image: quay.io/deisci/registry:canary
+
+  # router
+  router_image: quay.io/deisci/router:canary
+
+  # workflow-manager
+  workflow_manager_image: quay.io/deisci/workflow-manager:canary
+
+  # controller
+  controller_image: quay.io/deisci/controller:canary
+  slugrunner_image: quay.io/deisci/slugrunner:canary
+
+  # storage
+  builder_bucket: deis-builder-bucket
+  registry_bucket: deis-registry-bucket
+  database_bucket: deis-database-bucket
+  storage_creds:
+    minio:
+      access_key: 8TZRY2JRWMPT6UMXR6I5
+      secret_key: gbstrOvotMMcg2sMfGUhA5a6Et/EI5ALtIHsobYk
+    s3:
+      access_key: yours3key
+      secret_key: yours3secret
+      region: us-west-1
+    gcs:
+      key_json: "json data key"
+    azure:
+      account_name: yourazurename
+      account_key: yourazurekey
+
+resources:
+  - file: deis-builder-secret-ssh-private-keys.yaml
+    name: builder-ssh-private-keys
+    type: secret
+    protected: true
+
+  - file: deis-controller-secret-django-secret-key.yaml
+    name: django-secret-key
+    type: secret
+    protected: true
+
+  - file: deis-controller-secret-builder-key-auth.yaml
+    name: builder-key-auth
+    type: secret
+    protected: true
+
+  - file: deis-database-secret-creds.yaml
+    name: database-creds
+    type: secret
+    protected: true
+
+  - file: deis-objectstorage-secret.yaml
+    name: objectstorage-keyfile
+    type: secret
+
+  - file: deis-database-rc.yaml
+    name: deis-database
+    type: rc
+
+  - file: deis-logger-fluentd-daemon.yaml
+    name: deis-logger-fluentd
+    type: ds
+
+  - file: deis-logger-rc.yaml
+    name: deis-logger
+    type: rc
+
+  - file: deis-minio-rc.yaml
+    name: deis-minio
+    type: rc
+
+  - file: deis-registry-rc.yaml
+    name: deis-registry
+    type: rc
+
+  - file: deis-router-rc.yaml
+    name: deis-router
+    type: rc
+
+  - file: deis-workflow-manager-rc.yaml
+    name: deis-workflow-manager
+    type: rc
+
+  - file: deis-builder-rc.yaml
+    name: deis-builder
+    type: rc
+
+  - file: deis-controller-rc.yaml
+    name: deis-controller
+    type: rc
+
+  - file: deis-builder-service-account.yaml
+    name: deis-builder
+    type: serviceaccount
+
+  - file: deis-builder-service.yaml
+    name: deis-builder
+    type: service
+
+  - file: deis-workflow-manager-service-account.yaml
+    name: deis-workflow-manager
+    type: serviceaccount
+
+  - file: deis-workflow-manager-service.yaml
+    name: deis-workflow-manager
+    type: service
+
+  - file: deis-router-service-account.yaml
+    name: deis-router
+    type: serviceaccount
+
+  - file: deis-router-service.yaml
+    name: deis-router
+    type: service
+
+  - file: deis-router-dhparam-secret.yaml
+    name: deis-router-dhparam
+    type: secret
+
+  - file: deis-registry-service-account.yaml
+    name: deis-registry
+    type: serviceaccount
+
+  - file: deis-registry-service.yaml
+    name: deis-registry
+    type: service
+
+  - file: deis-minio-service-account.yaml
+    name: deis-minio
+    type: serviceaccount
+
+  - file: deis-minio-service.yaml
+    name: deis-minio
+    type: service
+
+  - file: deis-minio-secret-user.yaml
+    name: minio-user
+    type: secret
+
+  - file: deis-logger-service-account.yaml
+    name: deis-logger
+    type: serviceaccount
+
+  - file: deis-logger-svc.yaml
+    name: deis-logger
+    type: service
+
+  - file: deis-logger-fluentd-service-account.yaml
+    name: deis-logger-fluentd
+    type: serviceaccount
+
+  - file: deis-database-service-account.yaml
+    name: deis-database
+    type: serviceaccount
+
+  - file: deis-database-service.yaml
+    name: deis-database
+    type: service
+
+  - file: deis-controller-service-account.yaml
+    name: deis-controller
+    type: serviceaccount
+
+  - file: deis-controller-service.yaml
+    name: deis-controller
+    type: service
+
+deploy:
+  - name: $self

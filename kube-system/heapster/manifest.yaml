@@ -1,0 +1,24 @@
+package:
+  name: kube-system/heapster
+  author: "Antoine Legrand <2t.antoine@gmail.com>"
+  version: 1.0.0
+  description: Kubernetes dashboard monitor
+  license: MIT
+
+variables:
+  namespace: kube-system
+  image: "kubernetes/heapster:canary"
+  svc_type: "NodePort"
+  sink: influxdb:http://monitoring-influxdb.{{namespace}}.svc.cluster.local:8086
+
+resources:
+  - file: heapster-svc.yaml
+    name: heapster
+    type: svc
+
+  - file: heapster-rc.yaml
+    name: heapster
+    type: rc
+
+deploy:
+  - name: $self

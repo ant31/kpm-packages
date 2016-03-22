@@ -1,0 +1,36 @@
+---
+package:
+  name: deis/deis-logger
+  author: ant31
+  version: 2.0.0-beta
+  description: deis-logger
+  license: MIT
+
+variables:
+  storage: minio
+  loggerfluentd_image: quay.io/deisci/fluentd:canary
+  logger_image: quay.io/deisci/logger:canary
+
+resources:
+  - file: deis-logger-service-account.yaml
+    name: deis-logger
+    type: serviceaccount
+
+  - file: deis-logger-fluentd-service-account.yaml
+    name: deis-logger-fluentd
+    type: serviceaccount
+
+  - file: deis-logger-fluentd-daemon.yaml
+    name: deis-logger-fluentd
+    type: ds
+
+  - file: deis-logger-rc.yaml
+    name: deis-logger
+    type: rc
+
+  - file: deis-logger-svc.yaml
+    name: deis-logger
+    type: service
+
+deploy:
+  - name: $self

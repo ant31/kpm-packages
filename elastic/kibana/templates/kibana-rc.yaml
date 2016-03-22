@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kibana
+  labels: {'k8s-app': 'kibana'}
+
+spec:
+  replicas: 1
+  selector: {'k8s-app': 'kibana'}
+  template:
+    metadata:
+      labels: {'k8s-app': 'kibana'}
+    spec:
+      containers:
+      - name: "kibana-container"
+        image: {{image}}
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        ports:
+          - containerPort: 5601
+            name: kibana
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5601
+          initialDelaySeconds: 30
+          timeoutSeconds: 5

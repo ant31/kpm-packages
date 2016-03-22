@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: slackin
+  labels:
+    k8s-app: slackin
+spec:
+  selector:
+    k8s-app: slackin
+  type: {{svc_type}}
+  ports:
+    - protocol: TCP
+      targetPort: 3000
+      name: slackin
+      port: 80

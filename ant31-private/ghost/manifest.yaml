@@ -1,0 +1,27 @@
+---
+package:
+  name: ant31-private/ghost
+  author: Antoine Legrand
+  version: 0.1.0
+  description: ghost
+  license: MIT
+
+resources:
+  - file: ghost-tls-secret.yaml
+    name: ghost-tls
+    type: secret
+
+  - file: ghost-ingress.yaml
+    name: ghost
+    type: ingresses
+
+deploy:
+  - name: $self
+
+  - name: kpm.sh/mysql/mysql
+    variables:
+      database: ghost
+      user: ghost
+      password: ghostpass
+
+  - name: kpm.sh/ghost/ghost

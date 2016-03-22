@@ -1,0 +1,36 @@
+---
+package:
+  name: ant31/etcd
+  author: Antoine
+  version: 0.2.2
+  description: etcd
+  license: MIT
+
+variables:
+  pvc_capacity: 10Gi
+
+resources:
+  - file: pvc.yaml
+    name: etcd
+    type: pvc
+    sharded: yes
+
+shards:
+  - name: 1
+  - name: 2
+  - name: hi
+    variables:
+      pvc_capacity: 50Gi
+
+deploy:
+  - name: $self
+  - name: coreos/etcd
+    shards:
+      - name: 1
+      - name: 2
+      - name: hi
+    variables:
+      data_volumes:
+        - name: varetcd
+          persistentVolumeClaim:
+            claimName: etcd-{{name}}

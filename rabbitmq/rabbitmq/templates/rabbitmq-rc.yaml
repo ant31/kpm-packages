@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    k8s-app: rabbitmq
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    k8s-app: rabbitmq
+    shard: "{{name}}"
+  template:
+    metadata:
+      labels:
+        k8s-app: rabbitmq
+        shard: "{{name}}"
+    spec:
+      containers:
+        - image: {{image}}
+          name: rabbitmq
+          ports:
+            - containerPort: 5672
+              name: rmq
+            - containerPort: 15672
+              name: rabbitmq-mgt
+            - containerPort: 4369
+              name: erlang
+            - containerPort: 25672
+              name: cluster
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2G
+          env:
+            - name: RABBITMQ_CLUSTER_NODES
+              value: "{[{% for shard in kpmshards %} 'rabbit@rabbitmq-{{shard.name}}'{% if not loop.last %},{% endif %}{% endfor %}], disc}"
+            - name: RABBITMQ_ERLANG_COOKIE
+              value: {{cookie}}
+            - name: RABBITMQ_HOSTNAME
+              value: rabbitmq-{{name}}
+            - name: RABBITMQ_NODENAME
+              value: rabbit@rabbitmq-{{name}}
+          volumeMounts:
+            - mountPath: '/var/lib/rabbitmq'
+              name: 'varlibrabbitmq'
+      volumes:
+        - {{data_volume}}

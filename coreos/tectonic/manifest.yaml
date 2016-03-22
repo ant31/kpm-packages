@@ -1,0 +1,33 @@
+---
+package:
+  name: coreos/tectonic
+  author: Antoine Legrand
+  version: 0.1.6-1
+  description: tectonic
+  license: MIT
+
+variables:
+  bridge_host: "http://example.com/dummy-value"
+  nodePort: 32000
+  license: "https://account.tectonic.com -> Universal Software License -> copy/paste raw format"
+  pullsecret: "https://account.tectonic.com -> kubernetes-secret -> copy/paste content of .dockercfg in the secret:  'Ew4/DcGEnHR3TpVrt....'"
+
+resources:
+  - file: coreos-pull-secret.yaml
+    name: coreos-pull-secret
+    type: secret
+
+  - file: tectonic-license.yaml
+    name: tectonic-license
+    type: secret
+
+  - file: tectonic-console-dp.yaml
+    name: tectonic-console
+    type: deployment
+
+  - file: tectonic-console-svc.yaml
+    name: tectonic-console
+    type: svc
+
+deploy:
+  - name: $self

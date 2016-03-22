@@ -1,0 +1,14 @@
+---
+package:
+  name: ant31/op-tools
+  author: Antoine Legrand
+  version: 1.0.0
+  description: Deploy my Kubernetes monitoring tools
+  license: MIT
+
+deploy:
+  - name: kube-system/heapster
+  - name: kube-system/influxdb-grafana
+  - name: kube-system/kubernetes-dashboard
+  - name: kube-system/kubedash
+  - name: kube-system/kube-ui

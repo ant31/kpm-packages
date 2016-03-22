@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat
+  namespace: default
+
+data:
+  filebeat.yaml: |
+    filebeat:
+      prospectors:
+        - paths:
+            - /var/log/containers/*.log
+          input_type: log
+      registry_file: /var/lib/filebeat/registry
+    output:
+      logstash:
+        hosts: ["{{logstash_host}}"]
+        worker: {{workers}}
+    shipper:
+    logging:

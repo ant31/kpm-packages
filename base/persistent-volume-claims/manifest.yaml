@@ -1,0 +1,24 @@
+---
+package:
+  name: base/persistent-volume-claims
+  author: Antoine Legrand
+  version: 1.0.0
+  description: persistent-volume-claims
+  license: MIT
+
+variables:
+  storage: 10Gi
+  accessModes: [ReadWriteOnce]
+  labels: {}
+
+resources:
+  - file: pvc.yaml
+    name: pvc
+    type: pvc
+    sharded: yes
+
+shards:
+  - name: 1
+
+deploy:
+  - name: $self

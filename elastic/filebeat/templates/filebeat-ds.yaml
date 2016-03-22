@@ -1,0 +1,50 @@
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: filebeat
+  namespace: logs
+  labels:
+    k8s-app: filebeat
+spec:
+  selector:
+    matchLabels:
+      k8s-app: filebeat
+  template:
+    metadata:
+      labels:
+        k8s-app: filebeat
+    spec:
+      containers:
+      - command:
+        - /usr/bin/filebeat
+        - -c
+        - /etc/filebeat/filebeat.yaml
+        image: {{image}}
+        name: filebeat
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200Mi
+        volumeMounts:
+        - mountPath: /etc/filebeat
+          name: filebeat
+        - mountPath: /var/log/journal
+          name: varlogjournal
+        - mountPath: /var/lib/docker/containers
+          name: varlibdockercontainers
+        - mountPath: /var/log/containers
+          name: varlogcontainers
+      volumes:
+      - configMap:
+          name: filebeat
+        name: filebeat
+      - hostPath:
+          path: /var/log/journal
+        name: varlogjournal
+      - hostPath:
+          path: /var/lib/docker/containers
+        name: varlibdockercontainers
+      - hostPath:
+          path: /var/log/containers
+        name: varlogcontainers

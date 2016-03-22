@@ -1,0 +1,13 @@
+---
+package:
+  name: elastic/elk
+  author: Antoine Legrand
+  version: 2.3.1-1
+  description: elk
+  license: MIT
+
+deploy:
+  - name: elastic/filebeat
+  - name: elastic/logstash
+  - name: elastic/elasticsearch
+  - name: elastic/kibana

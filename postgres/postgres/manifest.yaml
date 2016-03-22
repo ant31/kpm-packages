@@ -1,0 +1,29 @@
+---
+package:
+  name: postgres/postgres
+  author: Antoine Legrand
+  version: 9.5.3
+  description: postgres
+  license: MIT
+
+variables:
+  image: postgres:9.5.3
+  dbname: postgres
+  user: postgres
+  password: postgres
+  data_volumes:
+    - name: postgres-data
+      emptyDir:
+        medium: ""
+
+resources:
+  - file: postgres-deployment.yaml
+    name: postgres
+    type: deployment
+
+  - file: postgres-service.yaml
+    name: postgres
+    type: service
+
+deploy:
+  - name: $self

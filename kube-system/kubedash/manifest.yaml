@@ -1,0 +1,25 @@
+
+package:
+  name: kube-system/kubedash
+  author: Antoine Legrand
+  version: 1.0.0
+  description: kube-system/kubedash
+  license: MIT
+
+variables:
+  replicas: 1
+  namespace: kube-system
+  svc_type: NodePort
+  image: gcr.io/google_containers/kubedash:v0.2.1
+
+resources:
+  - file: kubedash-svc.yml
+    name: kubedash
+    type: svc
+
+  - file: kubedash-rc.yml
+    name: kubedash
+    type: rc
+
+deploy:
+  - name: $self

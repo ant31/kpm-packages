@@ -1,0 +1,24 @@
+---
+package:
+  name: elastic/kibana
+  author: Antoine Legrand
+  version: 4.5.0-4
+  description: kibana
+  license: MIT
+
+variables:
+  image: kibana:4.5
+  svc_type: NodePort
+
+resources:
+  - file: kibana-rc.yaml
+    name: kibana
+    type: rc
+
+  - file: kibana-svc.yaml
+    name: kibana
+    type: svc
+
+
+deploy:
+  - name: $self

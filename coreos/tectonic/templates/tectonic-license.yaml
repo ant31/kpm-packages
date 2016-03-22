@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tectonic-license
+data:
+  license: {{ license | b64encode }}
+type: Opaque

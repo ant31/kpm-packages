@@ -1,0 +1,42 @@
+---
+package:
+  name: rabbitmq/rabbitmq
+  author: Antoine Legrand
+  version: 3.5.6
+  description: rabbitmq
+  license: MIT
+
+variables:
+  namespace: default
+  image: quay.io/ant31/kubernetes-rabbitmq
+  cookie: "Dffds9342"
+  data_volume:
+    name: varlibrabbitmq
+    emptyDir:
+      medium: ""
+
+resources:
+  - file: rabbitmq-svc.yaml
+    type: svc
+    name: rabbitmq
+    sharded: true
+    protected: true
+
+  - file: rabbitmq-all-svc.yaml
+    type: svc
+    name: rabbitmq
+
+  - file: rabbitmq-management-svc.yaml
+    type: svc
+    name: rabbitmq-mgt
+
+  - file: rabbitmq-rc.yaml
+    type: rc
+    name: rabbitmq
+    sharded: true
+
+shards:
+  - name: 1
+
+deploy:
+  - name: $self

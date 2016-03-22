@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+      name: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql/mysql-server:5.6
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: {{root_password}}
+            - name: MYSQL_PASSWORD
+              value: {{password}}
+            - name: MYSQL_USER
+              value: {{user}}
+            - name: MYSQL_DATABASE
+              value: {{database}}
+          ports:
+            - name: mysql
+              containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-data
+      volumes: {{volumes}}
