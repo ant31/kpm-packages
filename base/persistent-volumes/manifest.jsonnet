@@ -27,7 +27,7 @@ function(
              {
               name: name,
               storage: {hostPath: {path: "/pv/%s" % name}}
-            } for name in ["pv01", "pv02"]
+            } for name in ["pv01"]
           ],
       name: "pv",
       capacity: "10Gi",

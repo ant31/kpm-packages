@@ -1,0 +1,14 @@
+volumes:
+  - name: 1
+    storage:
+      hostPath:
+        path: "/pv/pv-1"
+  - name: 2
+    capacity: 50Gi
+    storage:
+      hostPath:
+        path: "/pv/pv-2"
+  - name: 3
+    storage:
+      hostPath:
+        path: "/pv/pv-3"
