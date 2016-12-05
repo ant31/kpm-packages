@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  filebeat.yaml: |
+    filebeat.prospectors:
+    - input_type: log
+      paths:
+        - /var/log/containers/*.log
+      symlinks: true
+    output.logstash:
+      hosts: ["{{logstash_host}}"]
+
+    logging.level: info
+    logging.selectors: ["*"]
+kind: ConfigMap
+metadata:
+  name: filebeatconf

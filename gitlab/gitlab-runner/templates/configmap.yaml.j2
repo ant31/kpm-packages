@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gitlab-runner
+  namespace: gitlab
+data:
+  config.toml: |
+    concurrent = {{concurrent}}
+
+    [[runners]]
+      name = "Kubernetes Runner"
+      url = "{{gitlabci_url}}"
+      token = "{{token}}"
+      executor = "kubernetes"
+      [runners.kubernetes]
+        namespace = "{{namespace}}"
+        privileged = true

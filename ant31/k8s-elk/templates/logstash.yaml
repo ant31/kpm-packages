@@ -1,0 +1,54 @@
+apiVersion: v1
+data:
+  10-input-beat: |-
+    input {
+    beats {
+      port => 5044
+     }
+    }
+  20-kubernetes-filter: |-
+    filter {
+    if "log" == [input_type] {
+
+    mutate {
+     rename => ["source", "path"]
+    }
+    kubernetes {
+     add_tag => ["kubernetes_filtered"]
+    }
+    mutate {
+     rename => ["path", "log_source"]
+    }
+    json {
+     source => 'message'
+     target => 'log'
+      }
+     }
+    }
+
+  21-filter-json-message: |-
+    filter {
+      if [kubernetes][container_name] in ["kpm-api"] {
+        json {
+         source => 'log.log'
+         target => 'data'
+        }
+       }
+      }
+  22-drop-messages: |-
+    filter {
+      if [kubernetes][namespace] not in ["kpm", "kpm-beta", "kpm-stg", "kpm-dev"] {
+        drop {}
+       }
+      }
+
+  100-output-elasticsearch: |-
+    output {
+      elasticsearch {
+        hosts => ["elasticsearch.logs.svc.cluster.local:9200"]
+        }
+    }
+kind: ConfigMap
+metadata:
+  name: logstash
+  namespace: logs

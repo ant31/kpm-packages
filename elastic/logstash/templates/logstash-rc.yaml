@@ -25,6 +25,7 @@ spec:
             - logstash
             - -f
             - /etc/logstash/conf.d
+            - -r
           volumeMounts:
             - mountPath: /etc/logstash/conf.d
               name: logstashconf

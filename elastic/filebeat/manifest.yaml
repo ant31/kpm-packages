@@ -2,17 +2,17 @@
 package:
   name: elastic/filebeat
   author: Antoine Legrand
-  version: 1.2.2-1
+  version: 5.0.1-1
   description: filebeat
   license: MIT
 
 variables:
-  image: quay.io/ant31/kubernetes-logstash:2.3
+  image: quay.io/ant31/kubernetes-logstash:5
   logstash_host: logstash.{{namespace}}.svc.cluster.local:5044
   workers: 2
 
 resources:
-  - file: filebeat-configmap.yaml
+  - file: filebeatconf-configmap.yaml
     name: filebeat
     type: configmap
 

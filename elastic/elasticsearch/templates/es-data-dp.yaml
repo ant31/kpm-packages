@@ -36,6 +36,8 @@ spec:
           value: "false"
         - name: HTTP_ENABLE
           value: "false"
+        - name: ES_JAVA_OPTS
+          value: -Xms2000m -Xmx2000m
         ports:
         - containerPort: 9300
           name: transport

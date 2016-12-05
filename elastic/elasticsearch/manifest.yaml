@@ -2,18 +2,13 @@
 package:
   name: elastic/elasticsearch
   author: Antoine Legrand
-  version: 2.3.1-1
+  version: 5.0.1-1
   description: elasticsearch
   license: MIT
 
 variables:
-  image: quay.io/pires/docker-elasticsearch-kubernetes:2.3.1
+  image: quay.io/pires/docker-elasticsearch-kubernetes:5.0.1
   cluster_name: esk8s
-  data_volumes:
-    - name: storage
-      emptyDir:
-        medium: ""
-
 
 resources:
   - file: service-account.yaml
@@ -43,6 +38,41 @@ resources:
 
 shards:
   - name: 1
+    variables:
+      data_volumes: [
+      { name: "storage", persistentVolumeClaim: {
+        claimName: "pvc-es-1",
+        } }]
+
+  - name: 2
+    variables:
+      data_volumes: [
+      { name: "storage", persistentVolumeClaim: {
+        claimName: "pvc-es-2",
+        } }]
+  - name: 3
+    variables:
+      data_volumes: [
+      { name: "storage", persistentVolumeClaim: {
+        claimName: "pvc-es-3",
+        } }]
 
 deploy:
+  - name: "base/persistent-volume-claims"
+    shards:
+      - name: es-1
+        variables:
+          # storage_class: "gp2-aws"
+          storage: "50Gi"
+
+      - name: es-2
+        variables:
+          # storage_class: "gp2-aws"
+          storage: "50Gi"
+
+      - name: es-3
+        variables:
+          # storage_class: "gp2-aws"
+          storage: "50Gi"
+
   - name: $self

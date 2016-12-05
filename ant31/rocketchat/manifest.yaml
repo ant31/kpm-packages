@@ -1,8 +1,8 @@
 ---
 package:
-  name: "titi/rocketchat"
+  name: "devtable/rocketchat"
   author: Antoine Legrand <2t.antoine@gmail.com>
-  version: 1.7.0
+  version: 2.0.3
   description: rocketchat
   license: MIT
 
@@ -25,3 +25,4 @@ resources:
 
 deploy:
   - name: ant31/mongodb
+  - name: '$self'

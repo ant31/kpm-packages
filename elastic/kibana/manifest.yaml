@@ -2,12 +2,12 @@
 package:
   name: elastic/kibana
   author: Antoine Legrand
-  version: 4.5.0-4
+  version: 5.0.1-4
   description: kibana
   license: MIT
 
 variables:
-  image: kibana:4.5
+  image: kibana:5
   svc_type: NodePort
 
 resources:

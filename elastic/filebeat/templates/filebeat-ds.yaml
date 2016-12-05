@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
       - command:
-        - /usr/bin/filebeat
+        - filebeat
         - -c
-        - /etc/filebeat/filebeat.yaml
+        - /etc/filebeatconf/filebeat.yaml
         image: {{image}}
         name: filebeat
         resources:
@@ -27,7 +27,7 @@ spec:
             cpu: 200m
             memory: 200Mi
         volumeMounts:
-        - mountPath: /etc/filebeat
+        - mountPath: /etc/filebeatconf
           name: filebeat
         - mountPath: /var/log/journal
           name: varlogjournal
